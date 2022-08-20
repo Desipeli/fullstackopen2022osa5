@@ -5,6 +5,7 @@ import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -14,14 +15,10 @@ const App = () => {
   const [notification, setNotification] = useState('')
   const [notificationType, setNotificationType] = useState('')
 
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+      setBlogs(blogs)
+    )
   }, [])
 
   useEffect(() => {
@@ -34,7 +31,7 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
         username, password,
@@ -58,23 +55,6 @@ const App = () => {
     setUser(null)
   }
 
-  const addBlog = async (event) => {
-    event.preventDefault()
-    blogService.setToken(user.token)
-    try {
-      const result = await blogService.create({title, author, url})
-      const allBlogs = await blogService.getAll()
-      setBlogs(allBlogs)
-      setAuthor('')
-      setTitle('')
-      setUrl('')
-      displayNotification(`a new blog ${title} by ${author} added`)
-    } catch(error) {
-      displayError(error.response.data.error)
-    }
-    
-  }
-
   const displayError = (message) => {
     setNotification(message)
     setNotificationType('error')
@@ -95,30 +75,30 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={notification} notificationClass={notificationType}/>
-      {user === null && 
+      <Notification message={notification} notificationClass={notificationType} />
+      {user === null &&
         <div>
           <h2>Log in</h2>
           <LoginForm handleLogin={handleLogin}
             username={username}
             password={password}
             setUsername={setUsername}
-            setPassword={setPassword}/>
+            setPassword={setPassword} />
         </div>
       }
       {user !== null &&
-      <div>
-        <h2>blogs</h2>
-      <p> {user.username} logged in <button onClick={logout}>log out</button></p>
-      <h2>create new</h2>
-      <BlogForm addBlog={addBlog} title={title} author={author} url={url}
-        setTitle={setTitle} setAuthor={setAuthor} setUrl={setUrl}/>
-
+        <div>
+          <h2>blogs</h2>
+          <p> {user.username} logged in <button onClick={logout}>log out</button></p>
+          <Togglable buttonLabel='show blog form'>
+            <BlogForm displayError={displayError} displayNotification={displayNotification}
+              user={user} setBlogs={setBlogs} blogs={blogs}/>
+          </Togglable>
+        </div>
+      }
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
-      </div>
-      }    
+            <Blog key={blog.id} blog={blog} />
+          )}
     </div>
   )
 }
