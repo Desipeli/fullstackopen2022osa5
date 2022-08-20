@@ -4,13 +4,15 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [notification, setNotification] = useState('')
+  const [notificationType, setNotificationType] = useState('')
 
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -46,10 +48,8 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+
+      displayError(exception.response.data.error)
     }
   }
 
@@ -58,13 +58,44 @@ const App = () => {
     setUser(null)
   }
 
-  const addBlog = (values) => {
-    blogService.create({title, author, url})
+  const addBlog = async (event) => {
+    event.preventDefault()
+    blogService.setToken(user.token)
+    try {
+      const result = await blogService.create({title, author, url})
+      const allBlogs = await blogService.getAll()
+      setBlogs(allBlogs)
+      setAuthor('')
+      setTitle('')
+      setUrl('')
+      displayNotification(`a new blog ${title} by ${author} added`)
+    } catch(error) {
+      displayError(error.response.data.error)
+    }
+    
+  }
+
+  const displayError = (message) => {
+    setNotification(message)
+    setNotificationType('error')
+    setTimeout(() => {
+      setNotification(null)
+      setNotificationType(null)
+    }, 4000)
+  }
+
+  const displayNotification = (message) => {
+    setNotification(message)
+    setNotificationType('notification')
+    setTimeout(() => {
+      setNotification(null)
+      setNotificationType(null)
+    }, 4000)
   }
 
   return (
     <div>
-
+      <Notification message={notification} notificationClass={notificationType}/>
       {user === null && 
         <div>
           <h2>Log in</h2>
