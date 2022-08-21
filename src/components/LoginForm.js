@@ -1,4 +1,8 @@
-const LoginForm = ({handleLogin, username, setUsername, setPassword, password}) => (
+import PropTypes from 'prop-types'
+import React from 'react'
+
+const LoginForm = React.forwardRef(({handleLogin, username, setUsername, setPassword, password}, ref) => (
+
   <form onSubmit={handleLogin}>
       <div>
         username
@@ -21,6 +25,14 @@ const LoginForm = ({handleLogin, username, setUsername, setPassword, password}) 
       </div>
       <button type="submit">login</button>
     </form> 
-)
+))
+
+LoginForm.propTypes={
+  handleLogin: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+  password: PropTypes.string.isRequired,
+  setUsername: PropTypes.func.isRequired,
+  setPassword: PropTypes.func.isRequired
+}
 
 export default LoginForm
