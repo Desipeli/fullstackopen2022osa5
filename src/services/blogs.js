@@ -13,7 +13,7 @@ const getAll = () => {
 
 const create = async newObject => {
   const config = {
-    headers: { Authorization: token}
+    headers: { Authorization: token }
   }
 
   const response = await axios.post(baseUrl, newObject, config)
@@ -28,8 +28,8 @@ const like = async ({ modifiedBlog }) => {
     author: blog.author,
     url: blog.url,
     likes: blog.likes + 1,
-    user: blog.user.id 
-    })
+    user: blog.user.id
+  })
 
   return response.data
 }
@@ -43,10 +43,10 @@ const removeBlog = async (id) => {
   return response
 }
 
-export default { 
+export default {
   getAll,
   setToken,
   create,
   like,
   removeBlog,
- }
+}

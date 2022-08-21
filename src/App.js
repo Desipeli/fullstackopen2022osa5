@@ -36,7 +36,7 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
-      console.log("Logged in: ", user)
+      console.log('Logged in: ', user)
       window.localStorage.setItem(
         'loggedUser', JSON.stringify(user)
       )
@@ -101,12 +101,12 @@ const App = () => {
         </div>
       }
       {blogs.sort((a, b) => {return b.likes - a.likes}).map(blog =>
-            <Blog key={blog.id} blog={blog} user={user} 
-            removeBlogWithId={removeBlogWithId}
-            displayError={displayError}
-            displayNotification={displayNotification}
-            />
-          )}
+        <Blog key={blog.id} blog={blog} user={user}
+          removeBlogWithId={removeBlogWithId}
+          displayError={displayError}
+          displayNotification={displayNotification}
+        />
+      )}
     </div>
   )
 }
