@@ -73,6 +73,10 @@ const App = () => {
     }, 4000)
   }
 
+  const removeBlogWithId = (id) => {
+    setBlogs(blogs.filter(b => b.id !== id))
+  }
+
   return (
     <div>
       <Notification message={notification} notificationClass={notificationType} />
@@ -97,7 +101,11 @@ const App = () => {
         </div>
       }
       {blogs.sort((a, b) => {return b.likes - a.likes}).map(blog =>
-            <Blog key={blog.id} blog={blog}/>
+            <Blog key={blog.id} blog={blog} user={user} 
+            removeBlogWithId={removeBlogWithId}
+            displayError={displayError}
+            displayNotification={displayNotification}
+            />
           )}
     </div>
   )
