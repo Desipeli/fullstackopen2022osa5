@@ -77,6 +77,20 @@ const App = () => {
     setBlogs(blogs.filter(b => b.id !== id))
   }
 
+  const sendBlog = async ({ title, author, url }) => {
+    blogService.setToken(user.token)
+    try {
+      const result = await blogService.create({ title, author, url })
+      result.user = user
+      setBlogs(blogs.concat(result))
+      displayNotification(`a new blog ${title} by ${author} added`)
+      return true
+    } catch (error) {
+      displayError(error.response.data.error)
+      return false
+    }
+  }
+
   return (
     <div>
       <Notification message={notification} notificationClass={notificationType} />
@@ -96,7 +110,7 @@ const App = () => {
           <p> {user.username} logged in <button onClick={logout}>log out</button></p>
           <Togglable buttonLabel='show blog form'>
             <BlogForm displayError={displayError} displayNotification={displayNotification}
-              user={user} setBlogs={setBlogs} blogs={blogs}/>
+              user={user} setBlogs={setBlogs} blogs={blogs} sendBlog={sendBlog}/>
           </Togglable>
         </div>
       }
