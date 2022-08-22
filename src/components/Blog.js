@@ -48,7 +48,7 @@ const Blog = ({
         {blog.title} {blog.author}
       </div>
       {showFullInfo &&
-        <>
+        <div className={'blog-other-rows'}>
           <br></br>
           {blog.url}<br></br>
           {likes} <button onClick={() => likeHandler()}>like</button><br></br>
@@ -56,7 +56,7 @@ const Blog = ({
           {user && blog.user.username === user.username &&
             <button onClick={removeHandler}>remove</button>
           }
-        </>
+        </div>
       }
     </div>
   )
