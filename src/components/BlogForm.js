@@ -22,19 +22,22 @@ const BlogForm = ({ sendBlog }) => {
     title
       <input
         value={title}
+        id='title-input'
         onChange={({ target }) => setTitle(target.value)}
       /><br></br>
     author
       <input
         value={author}
+        id='author-input'
         onChange={({ target }) => setAuthor(target.value)}
       /><br></br>
     url
       <input
         value={url}
+        id='url-input'
         onChange={({ target }) => setUrl(target.value)}
       /><br></br>
-      <button onClick={addBlog} type="submit">create</button>
+      <button id='create-blog-button' onClick={addBlog} type="submit">create</button>
     </form>
   )
 }

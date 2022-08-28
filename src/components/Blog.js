@@ -51,7 +51,7 @@ const Blog = ({
         <div className={'blog-other-rows'}>
           <br></br>
           {blog.url}<br></br>
-          {likes} <button onClick={() => likeHandler()}>like</button><br></br>
+          {likes} <button className='like-button' onClick={() => likeHandler()}>like</button><br></br>
           {blog.user.username}<br></br>
           {user && blog.user.username === user.username &&
             <button onClick={removeHandler}>remove</button>
