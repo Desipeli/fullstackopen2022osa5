@@ -48,7 +48,7 @@ describe('Blog app ', function() {
       cy.contains('peruna logged in')
     })
 
-    it.only('A blog can be created and liked', function() {
+    it('A blog can be created and liked', function() {
       cy.contains('show blog form').click()
       cy.get('#title-input').type('The Title')
       cy.get('#author-input').type('The Author')
@@ -63,7 +63,56 @@ describe('Blog app ', function() {
         .click()
         .click()
       cy.contains('2')
+    })
 
+    describe('When blog is created', function() {
+      beforeEach(function() {
+        const blog = {
+          title: 'Titteli',
+          author: 'Autori',
+          url: 'urli'
+        }
+        cy.request({
+          url: 'http://localhost:3003/api/blogs',
+          method: 'POST',
+          body: blog,
+          headers: {
+            'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedUser')).token}`
+          }
+        })
+        cy.visit('http://localhost:3000')
+      })
+
+      it('blog can be removed by creator', function() {
+        cy.get('.blog-first-row').contains('Titteli Autori').click()
+        cy.get('.blog-first-row').contains('Titteli Autori')
+          .parent()
+          .find('.remove-button')
+          .click()
+
+        cy.contains('Removed Titteli Autori')
+        cy.get('.blog').should('not.exist')
+      })
+
+      it.only('blog cannot be removed by other users', function() {
+        const user = {
+          name: 'Bob',
+          username: 'bataatti',
+          password: '4321'
+        }
+        cy.request('POST', 'http://localhost:3003/api/users', user)
+
+        cy.contains('log out').click()
+        cy.get('#username-input').type('bataatti')
+        cy.get('#password-input').type('4321')
+        cy.get('#login-button').click()
+        cy.contains('bataatti logged in')
+
+        cy.get('.blog-first-row').contains('Titteli Autori').click()
+        cy.get('.blog-first-row').contains('Titteli Autori')
+          .parent()
+          .find('.remove-button').should('not.exist')
+      })
     })
   })
 })
