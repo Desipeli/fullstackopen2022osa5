@@ -13,6 +13,7 @@ const blog = {
 }
 
 test('show initially only title and author', () => {
+
   const { container } = render(<Blog blog={blog} />)
 
   const div = container.querySelector('.blog-first-row')
@@ -24,6 +25,7 @@ test('show initially only title and author', () => {
 })
 
 test('clicking the title shows all information', async () => {
+
   const { container } = render(<Blog blog={blog} />)
   const user = userEvent.setup()
   const div = container.querySelector('.blog-first-row')
@@ -39,9 +41,11 @@ test('clicking the title shows all information', async () => {
   expect(others).toHaveTextContent('moi')
   expect(others).toHaveTextContent('2')
   expect(others).toHaveTextContent('osoite')
+
 })
 
 test('clicking the title again hides other information', async () => {
+
   const { container } = render(<Blog blog={blog} />)
   const user = userEvent.setup()
   const div = container.querySelector('.blog-first-row')
@@ -61,6 +65,7 @@ test('clicking the title again hides other information', async () => {
 
   const noOthers = container.querySelector('.blog-other-rows')
   expect(noOthers).toBeNull()
+
 })
 
 test('clicking removebutton', async () => {
@@ -71,9 +76,8 @@ test('clicking removebutton', async () => {
     username: 'moi'
   }
 
-  const { container } = render(
-    <Blog blog={blog} user={user} displayError={mockHandler} />
-  )
+  const { container } = render(<Blog blog={blog} user={user}
+    displayError={mockHandler}/>)
 
   const eventUser = userEvent.setup()
   const div = container.querySelector('.blog-first-row')

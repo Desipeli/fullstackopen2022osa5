@@ -16,7 +16,9 @@ const App = () => {
   const [notificationType, setNotificationType] = useState('')
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
+    blogService.getAll().then(blogs =>
+      setBlogs(blogs)
+    )
   }, [])
 
   useEffect(() => {
@@ -32,16 +34,18 @@ const App = () => {
 
     try {
       const user = await loginService.login({
-        username,
-        password
+        username, password,
       })
       console.log('Logged in: ', user)
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      window.localStorage.setItem(
+        'loggedUser', JSON.stringify(user)
+      )
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
     } catch (exception) {
+
       displayError(exception.response.data.error)
     }
   }
@@ -70,7 +74,7 @@ const App = () => {
   }
 
   const removeBlogWithId = (id) => {
-    setBlogs(blogs.filter((b) => b.id !== id))
+    setBlogs(blogs.filter(b => b.id !== id))
   }
 
   const sendBlog = async ({ title, author, url }) => {
@@ -89,57 +93,38 @@ const App = () => {
 
   return (
     <div>
-      <Notification
-        message={notification}
-        notificationClass={notificationType}
-      />
-      {user === null && (
+      <Notification message={notification} notificationClass={notificationType} />
+      {user === null &&
         <div>
           <h2>Log in</h2>
-          <LoginForm
-            handleLogin={handleLogin}
+          <LoginForm handleLogin={handleLogin}
             username={username}
             password={password}
             setUsername={setUsername}
-            setPassword={setPassword}
-          />
+            setPassword={setPassword} />
         </div>
-      )}
-      {user !== null && (
+      }
+      {user !== null &&
         <div>
           <h2>blogs</h2>
-          <p>
-            {' '}
-            {user.username} logged in <button onClick={logout}>log out</button>
-          </p>
-          <Togglable buttonLabel="show blog form">
-            <BlogForm
-              displayError={displayError}
-              displayNotification={displayNotification}
-              user={user}
-              setBlogs={setBlogs}
-              blogs={blogs}
-              sendBlog={sendBlog}
-            />
+          <p> {user.username} logged in <button onClick={logout}>log out</button></p>
+          <Togglable buttonLabel='show blog form'>
+            <BlogForm displayError={displayError} displayNotification={displayNotification}
+              user={user} setBlogs={setBlogs} blogs={blogs} sendBlog={sendBlog}/>
           </Togglable>
         </div>
+      }
+      {blogs.sort((a, b) => {return b.likes - a.likes}).map(blog =>
+        <Blog key={blog.id} blog={blog} user={user}
+          removeBlogWithId={removeBlogWithId}
+          displayError={displayError}
+          displayNotification={displayNotification}
+        />
       )}
-      {blogs
-        .sort((a, b) => {
-          return b.likes - a.likes
-        })
-        .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            user={user}
-            removeBlogWithId={removeBlogWithId}
-            displayError={displayError}
-            displayNotification={displayNotification}
-          />
-        ))}
     </div>
   )
 }
+
+
 
 export default App
