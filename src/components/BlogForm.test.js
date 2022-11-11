@@ -8,7 +8,7 @@ test('BlogForm', async () => {
   const eventUser = userEvent.setup()
   const mockHandler = jest.fn()
 
-  render(<BlogForm sendBlog={mockHandler}/>)
+  render(<BlogForm sendBlog={mockHandler} />)
 
   const inputs = screen.getAllByRole('textbox')
   const create = screen.getByText('create')

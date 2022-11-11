@@ -43,21 +43,29 @@ const Blog = ({
   }
 
   return (
-    <div className={'blog'} >
+    <div className={'blog'}>
       <div className={'blog-first-row'} onClick={() => clickHandler()}>
         {blog.title} {blog.author}
       </div>
-      {showFullInfo &&
+      {showFullInfo && (
         <div className={'blog-other-rows'}>
           <br></br>
-          {blog.url}<br></br>
-          {likes} <button className='like-button' onClick={() => likeHandler()}>like</button><br></br>
-          {blog.user.username}<br></br>
-          {user && blog.user.username === user.username &&
-            <button className='remove-button' onClick={removeHandler}>remove</button>
-          }
+          {blog.url}
+          <br></br>
+          {likes}{' '}
+          <button className="like-button" onClick={() => likeHandler()}>
+            like
+          </button>
+          <br></br>
+          {blog.user.username}
+          <br></br>
+          {user && blog.user.username === user.username && (
+            <button className="remove-button" onClick={removeHandler}>
+              remove
+            </button>
+          )}
         </div>
-      }
+      )}
     </div>
   )
 }
